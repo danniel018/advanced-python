@@ -6,9 +6,9 @@
 
 ## 📋 Project Overview
 
-This repository is structured as a **progressive learning path** that culminates in a capstone project. Each phase builds upon the previous one, ensuring you understand not just *what* to code, but *why* and *how*.
+This repository is structured as a **progressive learning path** that culminates in a capstone project. Each phase builds upon the previous one, ensuring uderstanding of studied topics.
 
-### What You'll Build
+### Application summary
 
 A **Real-Time Chat Application** with:
 - WebSocket-based instant messaging
@@ -24,7 +24,7 @@ A **Real-Time Chat Application** with:
 
 ```
 advanced-python/
-├── README.md                 # This file - Your roadmap and progress tracker
+├── README.md                 # This file - roadmap and progress tracker
 ├── guideline.md              # Detailed study plan and execution guide
 ├── .gitignore                # Ignore venv, __pycache__, .env, etc.
 ├── pyproject.toml            # Global config (Ruff/Mypy settings)
@@ -107,7 +107,7 @@ advanced-python/
 ---
 
 ### **Phase 4: FastAPI Implementation**
-**Goal:** Expose your architecture to the world via HTTP and WebSocket APIs.
+**Goal:** Expose architecture to the world via HTTP and WebSocket APIs.
 
 **Key Topics:**
 - WebSocket handling & authentication
@@ -176,69 +176,6 @@ advanced-python/
 
 ---
 
-## 🚀 Getting Started
-
-### Prerequisites
-- Python 3.11+
-- Docker & Docker Compose
-- Git
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd advanced-python
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   # Using Poetry
-   poetry install
-   
-   # Or using uv
-   uv sync
-   ```
-
-3. **Set up environment variables:**
-   ```bash
-   cd capstone_project
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-4. **Start services:**
-   ```bash
-   docker-compose up -d
-   ```
-
-5. **Run migrations:**
-   ```bash
-   alembic upgrade head
-   ```
-
-6. **Start the application:**
-   ```bash
-   uvicorn src.main:app --reload
-   ```
-
----
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=src --cov-report=html
-
-# Run specific test file
-pytest tests/test_repository.py
-```
-
----
-
 ## 📚 Key Technologies
 
 | Technology | Purpose |
@@ -256,15 +193,7 @@ pytest tests/test_repository.py
 
 ---
 
-## 📖 Learning Resources
 
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [SQLAlchemy 2.0 Documentation](https://docs.sqlalchemy.org/)
-- [Redis Pub/Sub Guide](https://redis.io/docs/manual/pubsub/)
-- [12-Factor App Methodology](https://12factor.net/)
-- [Python AsyncIO Documentation](https://docs.python.org/3/library/asyncio.html)
-
----
 
 ## 🎯 Progress Tracker
 
@@ -290,26 +219,3 @@ pytest tests/test_repository.py
   - [ ] Week 2: Real-Time Engine
   - [ ] Week 3: Task Queue
   - [ ] Week 4: Production Polish
-
----
-
-## 🤝 Contributing
-
-This is a personal learning project, but suggestions and improvements are welcome! Feel free to open an issue or submit a pull request.
-
----
-
-## 📝 License
-
-This project is for educational purposes.
-
----
-
-## 🔥 Next Steps
-
-1. Review the [guideline.md](guideline.md) for detailed phase-by-phase instructions
-2. Start with Phase 1 in the `01_modern_setup/` directory
-3. Work through each phase systematically
-4. Apply learned patterns in the `capstone_project/`
-
-**Happy Coding! 🚀**
