@@ -1,27 +1,26 @@
 """
 module to implement Open/Closed Principle (OCP) example
-adding stripe processor support to OrderProcessor 
+adding stripe processor support to OrderProcessor
 through paymentStrategy and concrete implementations
 """
+
 from abc import ABC
 
-class PaymentStrategy(ABC):
 
-    def process_payment(self):
+class PaymentStrategy(ABC):
+    def process_payment(self, total_amount: float, client_id: str):
         pass
 
 
 class StripePayment(PaymentStrategy):
-
-    def process_payment(self):
+    def process_payment(self, total_amount: float, client_id: str):
         return "processing with stripe"
-    
+
 
 class PaypalPayment(PaymentStrategy):
-
-    def process_payment(self):
+    def process_payment(self, total_amount: float, client_id: str):
         return "processing with paypal"
-    
+
 
 class OrderCalculator:
     def calculate_total(self, items):
@@ -70,11 +69,9 @@ class OrderProcessor:
     def process_order(self, order_id, items, user_email):
         total = self.order_calculator.calculate_total(items)
 
-        self.payment_gateway.process_payment(
-            self.payment_gateway, total, self.client_id
-        )
+        self.payment_gateway.process_payment(total, self.client_id)
 
-        self.database_order_processor.insert_order(order_id,total)
+        self.database_order_processor.insert_order(order_id, total)
 
         self.email_processor.send_confirmation(user_email)
 
