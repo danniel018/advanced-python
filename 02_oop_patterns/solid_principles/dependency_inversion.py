@@ -107,14 +107,12 @@ class OrderProcessor:
         notification_processor: NotificationProcessor,
         logger: Logger,
         payment_gateway: PaymentStrategy,
-        client_id: str = "client_123",
     ):
         self.order_calculator = calculator
         self.database_order_processor = database
         self.notification_processor = notification_processor
         self.logger = logger
         self.payment_gateway = payment_gateway
-        self.client_id = client_id
 
     def process_order(self, order_id, items, user_email):
         total = self.order_calculator.calculate_total(items)

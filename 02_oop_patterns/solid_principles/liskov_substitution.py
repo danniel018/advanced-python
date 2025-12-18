@@ -90,8 +90,9 @@ class OrderProcessor:
         self.logger.log(f"Order {order_id} processed with total ${total}")
 
 
-# Example usage:if __name__ == "__main__":
-items = [{"price": 10.0, "quantity": 2}, {"price": 5.0, "quantity": 1}]
+# Example usage:
+if __name__ == "__main__":
+    items = [{"price": 10.0, "quantity": 2}, {"price": 5.0, "quantity": 1}]
 calculator = OrderCalculator()
 database = DatabaseOrderProcessor()
 email = EmailProcessor()

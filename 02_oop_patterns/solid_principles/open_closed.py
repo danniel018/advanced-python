@@ -4,10 +4,11 @@ adding stripe processor support to OrderProcessor
 through paymentStrategy and concrete implementations
 """
 
-from abc import ABC
+from abc import ABC, abstractmethod
 
 
 class PaymentStrategy(ABC):
+    @abstractmethod
     def process_payment(self, total_amount: float, client_id: str):
         pass
 
