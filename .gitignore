@@ -144,6 +144,13 @@ ENV/
 env.bak/
 venv.bak/
 
+# Database files
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+test.db
+
 # Spyder project settings
 .spyderproject
 .spyproject
