@@ -1,6 +1,5 @@
 """module for domain logic for user service"""
 
-
 from ..core.models import User
 from ..repositories.base import BaseUserRepository
 
@@ -19,4 +18,3 @@ class UserService:
     async def fetch_users(self):
         """Fetch all users from repository."""
         return await self.repository.get_all()
-

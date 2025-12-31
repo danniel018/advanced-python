@@ -1,4 +1,3 @@
-from typing import List, Optional
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -39,24 +38,20 @@ class SQLAlchemyUserRepository(BaseUserRepository):
             age=user.age,
         )
 
-    async def get_by_id(self, item_id: int) -> Optional[User]:
-        result = await self.session.execute(
-            select(UserModel).where(UserModel.id == item_id)
-        )
+    async def get_by_id(self, item_id: int) -> User | None:
+        result = await self.session.execute(select(UserModel).where(UserModel.id == item_id))  # type: ignore[arg-type]
         user_model = result.scalar_one_or_none()
         if user_model:
             return self._to_domain_model(user_model)
         return None
 
-    async def get_all(self) -> List[User]:
+    async def get_all(self) -> list[User]:
         result = await self.session.execute(select(UserModel))
         user_models = result.scalars().all()
         return [self._to_domain_model(user_model) for user_model in user_models]
 
     async def update(self, item: User) -> bool:
-        result = await self.session.execute(
-            select(UserModel).where(UserModel.id == item.id)
-        )
+        result = await self.session.execute(select(UserModel).where(UserModel.id == item.id))  # type: ignore[arg-type]
         existing_user = result.scalar_one_or_none()
         if not existing_user:
             return False
@@ -67,14 +62,10 @@ class SQLAlchemyUserRepository(BaseUserRepository):
         return True
 
     async def delete(self, item_id: int) -> bool:
-        result = await self.session.execute(
-            select(UserModel).where(UserModel.id == item_id)
-        )
+        result = await self.session.execute(select(UserModel).where(UserModel.id == item_id))  # type: ignore[arg-type]
         user = result.scalar_one_or_none()
         if not user:
             return False
         await self.session.delete(user)
         await self.session.commit()
         return True
-
-    

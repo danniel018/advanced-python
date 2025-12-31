@@ -1,11 +1,9 @@
-from typing import List
 
 from fastapi import APIRouter, Depends
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict
 
-from ..dependencies import get_user_service
 from ...services.user import UserService
-
+from ..dependencies import get_user_service
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -13,16 +11,15 @@ router = APIRouter(prefix="/users", tags=["users"])
 class UserResponse(BaseModel):
     """Response model for user data."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     username: str
     email: str
     age: int
 
-    class Config:
-        from_attributes = True
 
-
-@router.get("/", response_model=List[UserResponse])
+@router.get("/", response_model=list[UserResponse])
 async def get_users(user_service: UserService = Depends(get_user_service)):
     """Get all users."""
     result = await user_service.fetch_users()
@@ -36,4 +33,3 @@ async def get_users(user_service: UserService = Depends(get_user_service)):
         )
         for user in result
     ]
-

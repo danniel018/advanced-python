@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
 
 from ..core.models import User
 
@@ -12,11 +11,11 @@ class BaseUserRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_by_id(self, item_id: int) -> Optional[User]:
+    async def get_by_id(self, item_id: int) -> User | None:
         pass
 
     @abstractmethod
-    async def get_all(self) -> List[User]:
+    async def get_all(self) -> list[User]:
         pass
 
     @abstractmethod

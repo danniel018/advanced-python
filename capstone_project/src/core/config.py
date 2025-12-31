@@ -8,12 +8,12 @@ class Settings(BaseSettings):
 
     # Database settings
     DATABASE_URL: str = "sqlite+aiosqlite:///./test.db"
-    
+
     # Application settings
     DEBUG: bool = False
     APP_NAME: str = "Capstone Project API"
     APP_VERSION: str = "1.0.0"
-    
+
     # Database engine settings
     DB_ECHO: bool = False
     DB_POOL_SIZE: int = 5
