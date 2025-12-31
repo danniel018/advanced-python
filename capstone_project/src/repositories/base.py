@@ -1,26 +1,28 @@
 from abc import ABC, abstractmethod
+from typing import List, Optional
+
 from ..core.models import User
-from typing import Optional, List
-#Interfaces
+
+# Interfaces
 
 
 class BaseUserRepository(ABC):
     @abstractmethod
-    def add(self, item) -> User:
+    async def add(self, item) -> User:
         pass
 
     @abstractmethod
-    def get_by_id(self, item_id: int) -> Optional[User]:
+    async def get_by_id(self, item_id: int) -> Optional[User]:
         pass
 
     @abstractmethod
-    def get_all(self) -> List[User]: 
+    async def get_all(self) -> List[User]:
         pass
 
     @abstractmethod
-    def update(self, item) -> bool:
+    async def update(self, item) -> bool:
         pass
 
     @abstractmethod
-    def delete(self, item_id: int) -> bool:
+    async def delete(self, item_id: int) -> bool:
         pass
