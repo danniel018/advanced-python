@@ -1,5 +1,3 @@
-from typing import list
-
 from ..core.models import User
 from ..db.models import UserModel
 from .base import BaseUserRepository
