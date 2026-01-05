@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+
 from ..core.models import User
-from typing import Optional, List
-#Interfaces
+
+# Interfaces
 
 
 class BaseUserRepository(ABC):
@@ -10,11 +11,11 @@ class BaseUserRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, item_id: int) -> Optional[User]:
+    def get_by_id(self, item_id: int) -> User | None:
         pass
 
     @abstractmethod
-    def get_all(self) -> List[User]: 
+    def get_all(self) -> list[User]:
         pass
 
     @abstractmethod
