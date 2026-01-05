@@ -14,12 +14,14 @@ V5: After DIP - All dependencies are abstractions
 Run this file to see each version in action:
     python order_processor_evolution.py
 """
+
 from abc import ABC, abstractmethod
 
 
 # ============================================================================
 # V0: THE MONOLITH (Before any SOLID principles)
 # ============================================================================
+
 
 class OrderProcessorV0:
     """
@@ -56,32 +58,38 @@ class OrderProcessorV0:
 # V1: AFTER SRP (Single Responsibility Principle)
 # ============================================================================
 
+
 class OrderCalculatorV1:
     """SRP: Only calculates totals."""
+
     def calculate_total(self, items):
         return sum(item["price"] * item["quantity"] for item in items)
 
 
 class PaymentProcessorV1:
     """SRP: Only handles payments."""
+
     def process_payment(self, gateway, total, client_id):
         print(f"[V1] {gateway}: Charging {client_id} for ${total}")
 
 
 class DatabaseV1:
     """SRP: Only handles persistence."""
+
     def insert_order(self, order_id, total):
         print(f"[V1] INSERT INTO orders VALUES ({order_id}, {total})")
 
 
 class EmailProcessorV1:
     """SRP: Only sends emails."""
+
     def send_confirmation(self, user_email):
         print(f"[V1] Sending confirmation to {user_email}")
 
 
 class FileLoggerV1:
     """SRP: Only handles logging."""
+
     def log(self, message):
         print(f"[V1] LOG: {message}")
 
@@ -115,8 +123,10 @@ class OrderProcessorV1:
 # V2: AFTER OCP (Open/Closed Principle)
 # ============================================================================
 
+
 class PaymentStrategyV2(ABC):
     """OCP: Abstract base for payment strategies."""
+
     @abstractmethod
     def process_payment(self, total: float, client_id: str):
         pass
@@ -124,12 +134,14 @@ class PaymentStrategyV2(ABC):
 
 class StripePaymentV2(PaymentStrategyV2):
     """OCP: New payment method without modifying existing code."""
+
     def process_payment(self, total: float, client_id: str):
         print(f"[V2] Stripe: Charging {client_id} for ${total}")
 
 
 class PaypalPaymentV2(PaymentStrategyV2):
     """OCP: Another payment method - no modification needed."""
+
     def process_payment(self, total: float, client_id: str):
         print(f"[V2] PayPal: Charging {client_id} for ${total}")
 
@@ -165,8 +177,10 @@ class OrderProcessorV2:
 # V3: AFTER LSP (Liskov Substitution Principle)
 # ============================================================================
 
+
 class PaymentStrategyV3(ABC):
     """LSP: Unified signature - credentials in __init__, not process_payment."""
+
     @abstractmethod
     def process_payment(self, total: float):
         pass
@@ -182,6 +196,7 @@ class StripePaymentV3(PaymentStrategyV3):
 
 class CryptoPaymentV3(PaymentStrategyV3):
     """LSP ✅ Same signature as other strategies - wallet in __init__."""
+
     def __init__(self, wallet_address: str):
         self.wallet_address = wallet_address
 
@@ -220,8 +235,10 @@ class OrderProcessorV3:
 # V4: AFTER ISP (Interface Segregation Principle)
 # ============================================================================
 
+
 class EmailSenderV4(ABC):
     """ISP: Focused interface for email only."""
+
     @abstractmethod
     def send_email(self, message: str):
         pass
@@ -229,6 +246,7 @@ class EmailSenderV4(ABC):
 
 class SMSSenderV4(ABC):
     """ISP: Focused interface for SMS only."""
+
     @abstractmethod
     def send_sms(self, message: str):
         pass
@@ -236,12 +254,14 @@ class SMSSenderV4(ABC):
 
 class EmailNotifierV4(EmailSenderV4):
     """ISP ✅ Implements only what it needs."""
+
     def send_email(self, message: str):
         print(f"[V4] Email: {message}")
 
 
 class MultiNotifierV4(EmailSenderV4, SMSSenderV4):
     """ISP ✅ Implements multiple interfaces by choice, not force."""
+
     def send_email(self, message: str):
         print(f"[V4] Email: {message}")
 
@@ -280,8 +300,10 @@ class OrderProcessorV4:
 # V5: AFTER DIP (Dependency Inversion Principle) - FINAL VERSION
 # ============================================================================
 
+
 class OrderRepositoryV5(ABC):
     """DIP: Abstraction for persistence."""
+
     @abstractmethod
     def insert_order(self, order_id: str, total: float):
         pass
@@ -289,6 +311,7 @@ class OrderRepositoryV5(ABC):
 
 class LoggerV5(ABC):
     """DIP: Abstraction for logging."""
+
     @abstractmethod
     def log(self, message: str):
         pass
@@ -316,6 +339,7 @@ class CloudLoggerV5(LoggerV5):
 
 class OrderCalculatorV5:
     """Calculator - kept concrete as it has no external dependencies."""
+
     def calculate_total(self, items):
         return sum(item["price"] * item["quantity"] for item in items)
 
@@ -358,6 +382,7 @@ class OrderProcessorV5:
 # DEMONSTRATION
 # ============================================================================
 
+
 def demo():
     """Run all versions to see the evolution."""
     items = [{"price": 10.0, "quantity": 2}, {"price": 5.0, "quantity": 1}]
@@ -390,8 +415,7 @@ def demo():
     print("V4: After ISP (Focused notification interfaces)")
     print("=" * 70)
     v4 = OrderProcessorV4(
-        payment=StripePaymentV3(client_id="stripe_123"),
-        notifier=MultiNotifierV4()
+        payment=StripePaymentV3(client_id="stripe_123"), notifier=MultiNotifierV4()
     )
     v4.process_order("001", items, "user@example.com")
 

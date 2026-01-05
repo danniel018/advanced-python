@@ -3,6 +3,7 @@ module to implement dependency inversion principle (DIP) example
 refactoring the Interface Segregation Principle (ISP) example in the
 interface_segregation.md file.
 """
+
 from abc import ABC
 from abc import abstractmethod
 
@@ -50,54 +51,63 @@ class EmailSender(ABC):
     def send_email(self, message):
         pass
 
+
 class SMSSender(ABC):
     @abstractmethod
     def send_sms(self, message):
         pass
+
 
 class SlackSender(ABC):
     @abstractmethod
     def send_slack_message(self, message):
         pass
 
+
 class NotificationProcessor(EmailSender, SMSSender):
     def send_email(self, message):
-        #implementation
+        # implementation
         print("Connecting to SMTP server...")
         print(f"Sending email: {message}")
+
     def send_sms(self, message):
-        #implementation
+        # implementation
         print("Connecting to SMS gateway...")
         print(f"Sending SMS: {message}")
+
 
 class Logger(ABC):
     @abstractmethod
     def log(self, message):
         pass
 
-class CloudLogger(Logger):
 
+class CloudLogger(Logger):
     def __init__(self, api_key: str):
         self.api_key = api_key
-        
+
     def log(self, message):
         print("Connecting to Cloud Logging Service...")
         print(f"Logging message: {message}")
+
 
 class FileLogger(Logger):
     def log(self, message):
         with open("app.log", "a") as f:
             f.write(f"{message}\n")
 
+
 class OrderRepository(ABC):
     @abstractmethod
     def insert_order(self, order_id, total):
         pass
 
+
 class PostgreSQLOrderRepository(OrderRepository):
     def insert_order(self, order_id, total):
         print("Connecting to PostgreSQL...")
         print(f"INSERT INTO orders (id, total) VALUES ({order_id}, {total})")
+
 
 class OrderProcessor:
     def __init__(
@@ -120,6 +130,7 @@ class OrderProcessor:
         self.database_order_processor.insert_order(order_id, total)
         self.notification_processor.send_email(f"Order {order_id} confirmed.")
         self.logger.log(f"Order {order_id} processed with total ${total}")
+
 
 # Example usage:
 if __name__ == "__main__":

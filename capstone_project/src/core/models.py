@@ -9,6 +9,7 @@ class User:
     email: str
     age: int
 
+
 @dataclass
 class Message:
     id: int | None

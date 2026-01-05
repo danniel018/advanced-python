@@ -55,23 +55,27 @@ class EmailSender(ABC):
     def send_email(self, message):
         pass
 
+
 class SMSSender(ABC):
     @abstractmethod
     def send_sms(self, message):
         pass
+
 
 class SlackSender(ABC):
     @abstractmethod
     def send_slack_message(self, message):
         pass
 
+
 class NotificationProcessor(EmailSender, SMSSender):
     def send_email(self, message):
-        #implementation
+        # implementation
         print("Connecting to SMTP server...")
         print(f"Sending email: {message}")
+
     def send_sms(self, message):
-        #implementation
+        # implementation
         print("Connecting to SMS gateway...")
         print(f"Sending SMS: {message}")
 
@@ -103,7 +107,6 @@ class OrderProcessor:
         self.database_order_processor.insert_order(order_id, total)
         self.notification_processor.send_email(f"Order {order_id} confirmed.")
         self.logger.log(f"Order {order_id} processed with total ${total}")
-
 
 
 # Example usage:

@@ -15,6 +15,7 @@ app = FastAPI(title="FastAPI Dependency Injection Examples")
 # EXAMPLE 1: Simple Function Dependencies
 # ============================================================================
 
+
 def get_query_params(skip: int = 0, limit: int = 10):
     """Simple dependency that extracts common query parameters"""
     return {"skip": skip, "limit": limit}
@@ -26,15 +27,13 @@ def read_items(params: dict = Depends(get_query_params)):
     Route handler with dependency injection.
     The get_query_params function is automatically called with request parameters.
     """
-    return {
-        "message": "Items endpoint",
-        "pagination": params
-    }
+    return {"message": "Items endpoint", "pagination": params}
 
 
 # ============================================================================
 # EXAMPLE 2: Class-based Dependencies
 # ============================================================================
+
 
 class User(BaseModel):
     id: int
@@ -45,6 +44,7 @@ class User(BaseModel):
 
 class PaginationParams:
     """Class-based dependency for pagination"""
+
     def __init__(self, skip: int = 0, limit: int = 10, sort_by: str = "id"):
         self.skip = skip
         self.limit = limit
@@ -61,7 +61,7 @@ def list_users(params: PaginationParams = Depends()):
         "message": "Users list",
         "skip": params.skip,
         "limit": params.limit,
-        "sort_by": params.sort_by
+        "sort_by": params.sort_by,
     }
 
 
@@ -86,11 +86,11 @@ def verify_token(token: str = Header(...)) -> int:
     # Simple token validation (in reality, use JWT)
     if not token.startswith("Bearer "):
         raise HTTPException(status_code=403, detail="Invalid token")
-    
+
     user_id = int(token.split()[-1])  # Simplified: token = "Bearer 1"
     if user_id not in fake_db["users"]:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     return user_id
 
 
@@ -115,15 +115,13 @@ def read_current_user(current_user: User = Depends(get_current_user)):
 @app.get("/auth/user-data")
 def get_user_data(current_user: User = Depends(get_current_user)):
     """Another endpoint using the same dependency chain"""
-    return {
-        "user": current_user,
-        "timestamp": datetime.now().isoformat()
-    }
+    return {"user": current_user, "timestamp": datetime.now().isoformat()}
 
 
 # ============================================================================
 # EXAMPLE 4: Optional Dependencies
 # ============================================================================
+
 
 def get_optional_token(token: Optional[str] = Header(None)) -> Optional[str]:
     """Dependency that returns None if token is not provided"""
@@ -146,16 +144,18 @@ def read_public_items(token: Optional[str] = Depends(get_optional_token)):
 # EXAMPLE 5: Dependency with Side Effects (Database Connection)
 # ============================================================================
 
+
 class Database:
     """Simulated database connection"""
+
     def __init__(self):
         self.connected = True
         print("Database connected")
-    
+
     def close(self):
         self.connected = False
         print("Database closed")
-    
+
     def query(self, sql: str) -> List[dict]:
         if not self.connected:
             raise RuntimeError("Database connection is closed")
@@ -188,6 +188,7 @@ def get_items_from_db(db: Database = Depends(get_db)):
 # EXAMPLE 6: Multiple Dependencies in One Handler
 # ============================================================================
 
+
 def get_user_agent(user_agent: str = Header(None)) -> str:
     """Extract user agent from headers"""
     return user_agent or "Unknown"
@@ -198,7 +199,7 @@ def complex_endpoint(
     pagination: PaginationParams = Depends(),
     user_agent: str = Depends(get_user_agent),
     token: Optional[str] = Depends(get_optional_token),
-    db: Database = Depends(get_db)
+    db: Database = Depends(get_db),
 ):
     """
     Endpoint with multiple dependencies.
@@ -206,13 +207,10 @@ def complex_endpoint(
     Dependencies can depend on other dependencies.
     """
     return {
-        "pagination": {
-            "skip": pagination.skip,
-            "limit": pagination.limit
-        },
+        "pagination": {"skip": pagination.skip, "limit": pagination.limit},
         "user_agent": user_agent,
         "authenticated": token is not None,
-        "db_status": "connected" if db.connected else "disconnected"
+        "db_status": "connected" if db.connected else "disconnected",
     }
 
 
@@ -221,6 +219,7 @@ def complex_endpoint(
 # ============================================================================
 
 call_count = 0
+
 
 def count_calls(times: int = 1) -> int:
     """Dependency that increments a counter"""
@@ -234,7 +233,7 @@ def count_calls(times: int = 1) -> int:
 def cache_demo(
     count1: int = Depends(count_calls),
     count2: int = Depends(count_calls),  # Uses cached value by default
-    count3: int = Depends(count_calls, use_cache=False)  # Fresh call
+    count3: int = Depends(count_calls, use_cache=False),  # Fresh call
 ):
     """
     Demonstrates dependency caching within a request.
@@ -246,13 +245,14 @@ def cache_demo(
         "count2": count2,
         "count3": count3,
         "cached": count1 == count2,
-        "not_cached": count1 != count3
+        "not_cached": count1 != count3,
     }
 
 
 # ============================================================================
 # EXAMPLE 8: Dependency for Validation
 # ============================================================================
+
 
 def validate_limit(limit: int = 10) -> int:
     """Dependency that validates and constrains limit parameter"""
@@ -274,4 +274,5 @@ def get_validated_items(limit: int = Depends(validate_limit)):
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="127.0.0.1", port=8000)

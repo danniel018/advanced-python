@@ -60,11 +60,9 @@ class OrderProcessor:
     def process_order(self, order_id, items, user_email):
         total = self.order_calculator.calculate_total(items)
 
-        self.payment_processor.process_payment(
-            self.payment_gateway, total, self.client_id
-        )
+        self.payment_processor.process_payment(self.payment_gateway, total, self.client_id)
 
-        self.database_order_processor.insert_order(order_id,total)
+        self.database_order_processor.insert_order(order_id, total)
 
         self.email_processor.send_confirmation(user_email)
 

@@ -106,6 +106,4 @@ order_processor = OrderProcessor(
     logger,
     payment_gateway,
 )
-order_processor.process_order(
-    order_id=1, items=items, user_email="john.doe@example.com"
-)
+order_processor.process_order(order_id=1, items=items, user_email="john.doe@example.com")
