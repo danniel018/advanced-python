@@ -5,6 +5,7 @@ from ..repositories.base import BaseUserRepository
 
 
 class UserService:
+    """Domain logic for user-related operations"""
     def __init__(self, user_repository: BaseUserRepository) -> None:
         self.repository = user_repository
 

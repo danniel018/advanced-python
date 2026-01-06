@@ -30,17 +30,15 @@ class SQLAlchemyUserRepository(BaseUserRepository):
         return UserModel(id=user.id, username=user.username, email=user.email, age=user.age)
 
     async def get_by_id(self, item_id: int) -> User | None:
-        async with self.session as session:
-            result = await session.execute(select(UserModel).where(UserModel.id == item_id))
-            user_model = result.scalar_one_or_none()
+        result = await self.session.execute(select(UserModel).where(UserModel.id == item_id))
+        user_model = result.scalar_one_or_none()
         if user_model:
             return self._to_domain_model(user_model)
         return None
 
     async def get_all(self) -> list[User]:
-        async with self.session as session:
-            result = await session.execute(select(UserModel))
-            user_models = result.scalars().all()
+        result = await self.session.execute(select(UserModel))
+        user_models = result.scalars().all()
         return [self._to_domain_model(user_model) for user_model in user_models]
 
     def update(self, item: User) -> bool:
