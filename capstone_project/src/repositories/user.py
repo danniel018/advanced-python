@@ -1,10 +1,13 @@
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from ..core.models import User
 from ..db.models import UserModel
 from .base import BaseUserRepository
 
 
 class SQLAlchemyUserRepository(BaseUserRepository):
-    def __init__(self, session):
+    def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
     def add(self, item: dict) -> User:
@@ -26,14 +29,18 @@ class SQLAlchemyUserRepository(BaseUserRepository):
     def _to_orm_model(self, user: User) -> UserModel:
         return UserModel(id=user.id, username=user.username, email=user.email, age=user.age)
 
-    def get_by_id(self, item_id: int) -> User | None:
-        user_model = self.session.query(UserModel).filter(UserModel.id == item_id).first()
+    async def get_by_id(self, item_id: int) -> User | None:
+        async with self.session as session:
+            result = await session.execute(select(UserModel).where(UserModel.id == item_id))
+            user_model = result.scalar_one_or_none()
         if user_model:
             return self._to_domain_model(user_model)
         return None
 
-    def get_all(self) -> list[User]:
-        user_models = self.session.query(UserModel).all()
+    async def get_all(self) -> list[User]:
+        async with self.session as session:
+            result = await session.execute(select(UserModel))
+            user_models = result.scalars().all()
         return [self._to_domain_model(user_model) for user_model in user_models]
 
     def update(self, item: User) -> bool:

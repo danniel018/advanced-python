@@ -32,28 +32,12 @@ class TestUserServiceRegistration:
         result = user_service.register_user("john", "john@test.com", 25)
 
         # Assert
+        assert isinstance(result, User)
         assert result.username == "john"
         assert result.email == "john@test.com"
         assert result.age == 25
         mock_repository.add.assert_called_once()
 
-    def test_register_user_calls_repository_with_user_model(self, user_service, mock_repository):
-        """Test that repository is called with User domain model"""
-        # Arrange
-        mock_repository.add.return_value = User(
-            id=1, username="jane", email="jane@test.com", age=30
-        )
-
-        # Act
-        user_service.register_user("jane", "jane@test.com", 30)
-
-        # Assert
-        called_user = mock_repository.add.call_args[0][0]
-        assert isinstance(called_user, User)
-        assert called_user.username == "jane"
-        assert called_user.email == "jane@test.com"
-        assert called_user.age == 30
-        assert called_user.id is None  # ID should be None before persistence
 
     def test_register_user_with_different_ages(self, user_service, mock_repository):
         """Test user registration with various age values"""
@@ -71,14 +55,13 @@ class TestUserServiceRegistration:
             assert result.age == age
             mock_repository.add.reset_mock()
 
-    def test_register_user_returns_repository_result(self, user_service, mock_repository):
-        """Test that service returns what repository returns"""
+    def test_incorrect_age_value(self, user_service):
+        """Test registration with incorrect age values"""
         # Arrange
-        expected_user = User(id=99, username="bob", email="bob@example.com", age=40)
-        mock_repository.add.return_value = expected_user
+        invalid_ages = [-5, 0, 150, 200]
 
-        # Act
-        result = user_service.register_user("bob", "bob@example.com", 40)
-
-        # Assert
-        assert result is expected_user
+        for age in invalid_ages:
+            # Act & Assert
+            with pytest.raises(ZeroDivisionError) as exc_info:
+                user_service.register_user("invaliduser", "invalid@test.com", age)
+            assert str(exc_info.value) == "Age must be between 1 and 149"

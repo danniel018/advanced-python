@@ -1,14 +1,14 @@
 """Integration tests for user API endpoints"""
 
 import pytest
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 from src.main import app
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 async def async_client(override_get_session):
     """Create an async test client"""
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         yield client
 
 
