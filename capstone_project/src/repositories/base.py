@@ -7,21 +7,21 @@ from ..core.models import User
 
 class BaseUserRepository(ABC):
     @abstractmethod
-    def add(self, item) -> User:
+    async def add(self, item) -> User:
         pass
 
     @abstractmethod
-    def get_by_id(self, item_id: int) -> User | None:
+    async def get_by_id(self, item_id: int) -> User | None:
         pass
 
     @abstractmethod
-    def get_all(self) -> list[User]:
+    async def get_all(self) -> list[User]:
         pass
 
     @abstractmethod
-    def update(self, item) -> bool:
+    async def update(self, item) -> bool:
         pass
 
     @abstractmethod
-    def delete(self, item_id: int) -> bool:
+    async def delete(self, item_id: int) -> bool:
         pass

@@ -10,10 +10,10 @@ class SQLAlchemyUserRepository(BaseUserRepository):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    def add(self, item: dict) -> User:
-        user = UserModel(username=item["username"], email=item["email"], age=item["age"])
+    async def add(self, item: User) -> User:
+        user = UserModel(username=item.username, email=item.email, age=item.age)
         self.session.add(user)
-        self.session.commit()
+        await self.session.commit()
         self.session.refresh(user)
         self._to_domain_model(user)
         return user
@@ -41,20 +41,20 @@ class SQLAlchemyUserRepository(BaseUserRepository):
         user_models = result.scalars().all()
         return [self._to_domain_model(user_model) for user_model in user_models]
 
-    def update(self, item: User) -> bool:
-        existing_user = self.get_by_id(item.id)
+    async def update(self, item: User) -> bool:
+        existing_user = await self.get_by_id(item.id)
         if not existing_user:
             return False
         existing_user.username = item.username
         existing_user.email = item.email
         existing_user.age = item.age
-        self.session.commit()
+        await self.session.commit()
         return True
 
-    def delete(self, item_id: int) -> bool:
-        user = self.get_by_id(item_id)
+    async def delete(self, item_id: int) -> bool:
+        user = await self.get_by_id(item_id)
         if not user:
             return False
         self.session.delete(user)
-        self.session.commit()
+        await self.session.commit()
         return True
